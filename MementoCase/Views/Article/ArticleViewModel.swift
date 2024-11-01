@@ -44,20 +44,37 @@ import OSLog
             }
         }
         careTaker.clear()
+        lines.removeAll()
     }
 
-//    func undo() {
-//        let lastMemento = careTaker.restore()
-//        if lastMemento == nil {
-//            drawings = []
-//        } else {
-//            updateList()
-//        }
-//    }
-//
-//    func redo() {
-//        _ = careTaker.redo()
-//        updateList()
-//    }
-//
+    func undo() {
+        self.text = ""
+        
+        if let lastMemento = careTaker.restore(), let path = documentDirectoryUrl {
+            let fileName = lastMemento.state
+            let fileUrl = path.appendingPathComponent(fileName)
+            do {
+                let fileContent = try fileService.readAllStrings(from: fileUrl)
+                self.lines = fileContent ?? []
+            } catch {
+                logger.error("Error occured when reading the file: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func redo() {
+        self.text = ""
+        
+        if let lastMemento = careTaker.redo(), let path = documentDirectoryUrl {
+            let fileName = lastMemento.state
+            let fileUrl = path.appendingPathComponent(fileName)
+            do {
+                let fileContent = try fileService.readAllStrings(from: fileUrl)
+                self.lines = fileContent ?? []
+            } catch {
+                logger.error("Error occured when reading the file: \(error.localizedDescription)")
+            }
+        }
+    }
+
 }

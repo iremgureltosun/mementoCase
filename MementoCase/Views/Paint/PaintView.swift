@@ -37,33 +37,46 @@ struct PaintView: View {
                 )
 
                 HStack {
-                    // Clear button
-                    Button(action: {
-                        viewModel.clearDrawings()
-                    }) {
-                        Text("Clear")
-                            .customButtonStyle()
-                    }
+                    clearButton
 
-                    // Undo button
-                    Button(action: {
-                        viewModel.undo()
-                    }) {
-                        Text("Undo")
-                            .customButtonStyle()
-                    }
+                    undoButton
 
-                    // Redo button
-                    Button(action: {
-                        viewModel.redo()
-                    }) {
-                        Text("Redo")
-                            .customButtonStyle()
-                    }
+                    redoButton
                 }
-                .padding()
+                .padding(.bottom, 20)
+                Divider()
             }
             .navigationBarTitle("Drawing Board")
+        }
+    }
+
+    @ViewBuilder private var clearButton: some View {
+        // Clear button
+        Button(action: {
+            viewModel.clearDrawings()
+        }) {
+            Text("Clear")
+                .customButtonStyle()
+        }
+    }
+
+    @ViewBuilder private var undoButton: some View {
+        // Undo button
+        Button(action: {
+            viewModel.undo()
+        }) {
+            Text("Undo")
+                .customButtonStyle()
+        }
+    }
+
+    @ViewBuilder private var redoButton: some View {
+        // Redo button
+        Button(action: {
+            viewModel.redo()
+        }) {
+            Text("Redo")
+                .customButtonStyle()
         }
     }
 }

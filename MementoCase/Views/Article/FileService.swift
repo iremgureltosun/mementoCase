@@ -11,7 +11,7 @@ final class FileService {
     @discardableResult
     func writeToFile(fileName: String, content: [String]) throws -> URL {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileURL = documentsDirectory.appendingPathComponent("\(fileName).txt")
+        let fileURL = documentsDirectory.appendingPathComponent("\(fileName)")
 
         let contentString = content.joined(separator: "\n")
 
@@ -20,12 +20,7 @@ final class FileService {
         return documentsDirectory
     }
 
-    func readAllStrings(from filename: String) throws -> [String]? {
-        guard let fileURL = Bundle.main.url(forResource: filename, withExtension: nil) else {
-            print("File not found in bundle.")
-            return nil
-        }
-
+    func readAllStrings(from fileURL: URL) throws -> [String]? {
         let content = try String(contentsOf: fileURL, encoding: .utf8)
         return content.components(separatedBy: .newlines).filter { !$0.isEmpty }
     }
