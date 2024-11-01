@@ -6,16 +6,17 @@
 //
 
 import SwiftUI
+import OSLog
 
 struct ArticleView: View {
-    @State private var inputText: String = ""
+    @State private var viewModel = ArticleViewModel()
 
     var body: some View {
         VStack(spacing: 20) {
             Text("Article Generator")
                 .font(.title)
             
-            TextEditor(text: $inputText)
+            TextEditor(text: $viewModel.text)
                 .padding(.horizontal, 36)
                 .cornerRadius(8)
                 .overlay(
@@ -26,9 +27,20 @@ struct ArticleView: View {
             
             HStack (spacing: 20) {
                 Button {
-                    
+                    do {
+                        try viewModel.saveFile()
+                    }
+                    catch {
+                        viewModel.logger.error("Error occured: \(error.localizedDescription)")
+                    }
                 } label: {
                     Text("Save")
+                }
+                
+                Button {
+                    viewModel.clearFiles()
+                } label: {
+                    Text("Clear All")
                 }
                 
                 Spacer()

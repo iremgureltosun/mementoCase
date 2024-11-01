@@ -6,7 +6,6 @@
 //
 
 import Observation
-import SwiftUI
 
 @Observable final class PaintViewModel {
     private(set) var drawings: [Drawing] = []
