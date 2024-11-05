@@ -16,20 +16,20 @@ import OSLog
 
     var documentDirectoryUrl: URL?
 
-    var lines: [String] = []
-
-    // Computed property to get and set lines as a single string
-    var text: String {
-        get {
-            lines.joined(separator: "\n")
-        }
-        set {
-            lines = newValue.components(separatedBy: "\n")
-        }
+    var text: String = ""
+    
+    private func getText(from lines: [String]) -> String {
+        lines.joined(separator: "\n")
     }
-
+    
+    private func getLines() ->  [String] {
+        let lines = text.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+        return lines
+    }
+    
     func saveFile() throws {
         let fileName = fileService.generateFilename()
+        let lines = getLines()
         documentDirectoryUrl = try fileService.writeToFile(fileName: fileName, content: lines)
 
         careTaker.save(memento: FileNameMemento(state: fileName))
@@ -44,33 +44,33 @@ import OSLog
             }
         }
         careTaker.clear()
-        lines.removeAll()
+        text = ""
     }
 
     func undo() {
-        self.text = ""
-        
         if let lastMemento = careTaker.restore(), let path = documentDirectoryUrl {
             let fileName = lastMemento.state
             let fileUrl = path.appendingPathComponent(fileName)
             do {
                 let fileContent = try fileService.readAllStrings(from: fileUrl)
-                self.lines = fileContent ?? []
+                let lines = fileContent ?? []
+                text = getText(from: lines)
             } catch {
                 logger.error("Error occured when reading the file: \(error.localizedDescription)")
             }
+        } else {
+            print("not left")
         }
     }
 
     func redo() {
-        self.text = ""
-        
         if let lastMemento = careTaker.redo(), let path = documentDirectoryUrl {
             let fileName = lastMemento.state
             let fileUrl = path.appendingPathComponent(fileName)
             do {
                 let fileContent = try fileService.readAllStrings(from: fileUrl)
-                self.lines = fileContent ?? []
+                let lines = fileContent ?? []
+                text = getText(from: lines)
             } catch {
                 logger.error("Error occured when reading the file: \(error.localizedDescription)")
             }
