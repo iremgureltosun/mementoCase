@@ -5,7 +5,6 @@
 //  Created by İrem Tosun on 31.10.2024.
 //
 
-import OSLog
 import SwiftUI
 
 struct ArticleView: View {

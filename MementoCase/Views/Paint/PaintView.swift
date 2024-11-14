@@ -4,6 +4,7 @@
 //
 //  Created by İrem Tosun on 31.10.2024.
 //
+
 import SwiftUI
 
 struct PaintView: View {
@@ -21,7 +22,7 @@ struct PaintView: View {
                         context.stroke(drawing.path, with: .color(drawing.color), lineWidth: drawing.lineWidth)
                     }
 
-                    context.stroke(currentPath, with: .color(.black), lineWidth: 2)
+                    context.stroke(currentPath, with: .color(.black), lineWidth: 3)
                 }
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
@@ -30,7 +31,7 @@ struct PaintView: View {
                             currentPath.addLine(to: point)
                         }
                         .onEnded { _ in
-                            viewModel.addDrawing(Drawing(path: currentPath, color: .black, lineWidth: 2))
+                            viewModel.addDrawing(Drawing(path: currentPath, color: .black, lineWidth: 3))
                             // Reset 'currentPath' for the next drawing
                             currentPath = Path()
                         }
@@ -51,7 +52,6 @@ struct PaintView: View {
     }
 
     @ViewBuilder private var clearButton: some View {
-        // Clear button
         Button(action: {
             viewModel.clearDrawings()
         }) {
@@ -61,7 +61,6 @@ struct PaintView: View {
     }
 
     @ViewBuilder private var undoButton: some View {
-        // Undo button
         Button(action: {
             viewModel.undo()
         }) {
@@ -71,7 +70,6 @@ struct PaintView: View {
     }
 
     @ViewBuilder private var redoButton: some View {
-        // Redo button
         Button(action: {
             viewModel.redo()
         }) {

@@ -9,7 +9,6 @@ class CareTaker<T: MementoProtocol> {
     private(set) var mementos: [T] = []
     var currentIndex: Int = -1 // Start with no mementos
 
-    // Save a new memento to the history
     func save(memento: T) {
         // Remove any mementos after the current index to maintain history
         if currentIndex < mementos.count - 1 {
@@ -20,7 +19,6 @@ class CareTaker<T: MementoProtocol> {
         currentIndex += 1 // Move the index forward
     }
 
-    // Restore the last saved state
     func restore() -> T? {
         guard currentIndex >= 0 else { return nil }
         let memento = mementos[currentIndex]
@@ -28,14 +26,12 @@ class CareTaker<T: MementoProtocol> {
         return memento
     }
 
-    // Redo the last undone state
     func redo() -> T? {
         guard currentIndex + 1 < mementos.count else { return nil }
         currentIndex += 1 // Move the index forward for redo
         return mementos[currentIndex]
     }
 
-    // Clear all saved states
     func clear() {
         mementos.removeAll()
         currentIndex = -1 // Reset the index
